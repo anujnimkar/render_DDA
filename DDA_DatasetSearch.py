@@ -62,7 +62,7 @@ def save_data_dictionary(data_dictionary, output_file_path):
         json.dump(data_dictionary, f, indent=2) 
 
 # Usage
-sql_file_path = "/Users/anujnimkar/Desktop/Anuj_New_Data/Mac_Laptop_data/Projects/Data_Dictionary_Assistant/Codebase/Sample_SQL_Script.sql"
+sql_file_path = "Sample_SQL_Script.sql"
 #output_file_path = "/Users/anujnimkar/Desktop/Anuj_New_Data/Mac_Laptop_data/Projects/Data_Dictionary_Assistant/data_dictionary.json" 
    
  

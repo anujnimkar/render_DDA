@@ -17,7 +17,7 @@ openai.api_key = api_key
 
 
 # Usage
-sql_file_path = "/Users/anujnimkar/Desktop/Anuj_New_Data/Mac_Laptop_data/Projects/Data_Dictionary_Assistant/Codebase/Sample_SQL_Script.sql" 
+sql_file_path = "Sample_SQL_Script.sql" 
 
 
 
@@ -106,7 +106,7 @@ def search():
     
 
 
-    return render_template_string(''' 
+    return render_template_string('''  
         <!DOCTYPE html>
         <html>
         <head>
