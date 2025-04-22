@@ -12,7 +12,7 @@ app = Flask(__name__)
 with open('/etc/secrets/openai_key.txt') as f:
     api_key = f.read().strip()
 
-
+ 
 openai.api_key = api_key
 
 
