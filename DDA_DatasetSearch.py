@@ -19,7 +19,7 @@ def analyze_sql_code(sql_file_path, query):
     #print('SQL Content '+sql_content)    
 
     # Create a prompt for GPT 
-    organize_text = "Output each sentence up until a full stop '.' from the prompt response on a new line with line breaks. Exclude the SQL Query from the prompt response" 
+    organize_text = "Output each sentence up until a full stop '.' from the prompt response on a new line with line breaks. Do not include any SQL(Standard Query Language) queries in the prompt responses" 
                    
 
     print (type(query))
