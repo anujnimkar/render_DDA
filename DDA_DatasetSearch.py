@@ -1,4 +1,3 @@
- 
 import openai
 import os
 import re 
@@ -8,7 +7,7 @@ import json
 with open('/etc/secrets/openai_key.txt') as f:
     api_key = f.read().strip()
 
-openai.api_key = api_key
+client = openai.OpenAI(api_key=api_key)  
 
 def analyze_sql_code(sql_file_path, query):  
     # Read SQL file
@@ -18,44 +17,57 @@ def analyze_sql_code(sql_file_path, query):
 
     #print('SQL Content '+sql_content)    
 
-    # Create a prompt for GPT 
-    organize_text = "Output each sentence up until a full stop '.' from the prompt response on a new line with line breaks. Do not include any SQL(Standard Query Language) queries in the prompt responses" 
-                   
+    # Create a structured system prompt for more consistent responses
+    system_prompt = """You are a database expert that analyzes SQL code and provides precise, structured answers about database infrastructure.
+Follow these rules strictly:
+1. Always provide answers in a clear, bullet-point format
+2. Focus only on factual information derived from the SQL code
+3. If information is not available in the SQL code, explicitly state that
+4. For table descriptions, include: table name, primary purpose, and key columns
+5. For relationship questions, specify the exact join conditions or foreign keys
+6. Keep responses concise and directly related to the question
+7. Use consistent terminology throughout the response"""
 
-    print (type(query))
-    print (type(sql_content)) 
+    # Create a structured user prompt
+    user_prompt = f"""Please analyze the following SQL code and answer this question: {query}
 
+SQL Code:
+{sql_content}
 
+Format your response as follows:
+<strong>Direct Answer:</strong>
+[Concise answer to the question]
 
-    #prompt = query + "in" + {sql_content} 
+<strong>Supporting Details:</strong>
+[Relevant details from the SQL code]
 
-    prompt = (f"{query}, {organize_text}, {sql_content}!")      
+<strong>Additional Context:</strong>
+[Any important related information]"""
 
-
-
-    # Generate response using GPT
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # You can change this to a different model if needed
+    # Generate response using GPT with more structured prompting
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that analyzes SQL code and answers the questions related to the database created via this code."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
         ],
         max_tokens=2000,
         n=1,
-        stop=None,
-        temperature=0.5,
+        temperature=0.3,  # Reduced temperature for more consistent outputs
     ) 
 
-   
-    # Extract the JSON from the response
-    json_str = response.choices[0].message['content']
+    # Extract and format the response
+    response_content = response.choices[0].message.content
     
-
+    # Format the response for better readability in HTML
+    formatted_response = response_content.replace('\n', '<br>')
+    formatted_response = formatted_response.replace('• ', '<br>• ')
+    
     print('Inside DDA Dataset Search analyze sql function') 
 
-    #print (json_str)
+    #print (formatted_response)
 
-    return json_str 
+    return formatted_response 
 
 def save_data_dictionary(data_dictionary, output_file_path):
     with open(output_file_path, 'w') as f:
