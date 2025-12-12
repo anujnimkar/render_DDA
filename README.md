@@ -1,4 +1,4 @@
-Fairly early stage prototype of something called as a Data Infrastructure Search - https://render-dda.onrender.com/. 
+Prototype of Data Infrastructure Search - https://render-dda.onrender.com/. 
 
 Try the following prompts 
 - ‘What is the Calculation behind metric TotalRevenue’
