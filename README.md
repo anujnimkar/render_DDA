@@ -15,7 +15,10 @@ Data teams often struggle with finding information about their data assets. When
 
 
 **Solution :**
-With Data Infrastructure Search, the aim is to solve the above problem by providing quick and easy access to metrics for data teams. Think (Google/Perplexity) for your data infrastructure. Vision is, to simplify data discovery for data teams.
+With Data Infrastructure Search, the aim is to solve the above problem by providing quick and easy access to metrics for data teams. Think (Google/Perplexity) for your data infrastructure. 
+
+**Vision :** 
+Simplify data discovery for data teams.
 
 **Tech Stack**
 - Front-End : HTML, CSS
