@@ -1,0 +1,39 @@
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│ Lambda Triggers │───▶│ S3 Raw Bucket    │───▶│ Glue ETL        │
+│ (CSV files)     │    │ sf-fire-feeds/raw │    │ sf-fire-raw-to- │
+└─────────────────┘    └──────────────────┘    │ curated         │
+                                                │ (ISO timestamp  │
+                                                │ parsing)        │
+                                                └─────────────────┘
+                                                           │
+                                                ┌─────────────────┐
+                                                │ S3 Curated      │
+                                                │ sf-fire-feeds/   │
+                                                │ curated/year=... │
+                                                └─────────────────┘
+                                                           │
+                                                ┌─────────────────┐
+                                                │ Glue Crawler    │◄── Workflow
+                                                │ sf-fire-curated │    Trigger
+                                                │ crawler         │
+                                                └─────────────────┘
+                                                           │
+                                                ┌─────────────────┐
+                                                │ Athena          │
+                                                │ sf_fire_db.     │
+                                                │ curated         │
+                                                └─────────────────┘
+                                                           │
+                                                ┌─────────────────┐
+                                                │ Glue ETL        │
+                                                │ athena-to-      │
+                                                │ redshift        │
+                                                └─────────────────┘
+                                                           │
+                                                ┌─────────────────┐
+                                                │ Redshift        │
+                                                │ sf_fire_db.     │
+                                                │ public.         │
+                                                │ fire_calls_     │
+                                                │ redshift (PK)   │
+                                                └─────────────────┘
