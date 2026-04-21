@@ -7,7 +7,24 @@ from awsglue.job import Job
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
-args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+required_args = ["JOB_NAME"]
+optional_args = [
+    "catalog_database",
+    "raw_table",
+    "curated_s3_path",
+]
+
+present_optional = [
+    arg_name
+    for arg_name in optional_args
+    if f"--{arg_name}" in sys.argv
+]
+
+args = getResolvedOptions(sys.argv, required_args + present_optional)
+
+catalog_database = args.get("catalog_database", "sf_fire_db")
+raw_table = args.get("raw_table", "raw")
+curated_s3_path = args.get("curated_s3_path", "s3://sf-fire-feeds/curated/")
 sc = SparkContext()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
@@ -16,8 +33,8 @@ job.init(args['JOB_NAME'], args)
 
 # Read raw data
 raw_df = glueContext.create_dynamic_frame.from_catalog(
-    database="sf_fire_db", 
-    table_name="raw"
+    database=catalog_database,
+    table_name=raw_table
 ).toDF()
 
 print(f"Raw records: {raw_df.count()}")
@@ -68,7 +85,7 @@ curated_df.select("received_ts", "year", "month", "day") \
 curated_df.write \
     .mode("overwrite") \
     .partitionBy("year", "month", "day") \
-    .parquet("s3://sf-fire-feeds/curated/")
+    .parquet(curated_s3_path)
 
 job.commit()
 print("✅ ETL complete: ISO 8601 timestamps partitioned correctly")

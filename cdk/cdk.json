@@ -1,0 +1,20 @@
+{
+  "app": "python3 app.py",
+  "context": {
+    "@aws-cdk/core:newStyleStackSynthesis": true,
+    "pipeline": {
+      "bucket_name": "sf-fire-feeds",
+      "catalog_database": "sf_fire_db",
+      "raw_table": "raw",
+      "curated_table": "curated",
+      "curated_prefix": "curated/",
+      "redshift_jdbc_url": "jdbc:redshift://<cluster-endpoint>:5439/<database>",
+      "redshift_table": "public.fire_calls_redshift",
+      "redshift_temp_prefix": "redshift-temp/",
+      "redshift_secret_arn": "arn:aws:secretsmanager:<region>:<account-id>:secret:<secret-name>",
+      "redshift_glue_connection_names": [
+        "my-redshift-vpc-connection"
+      ]
+    }
+  }
+}

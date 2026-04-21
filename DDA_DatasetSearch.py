@@ -89,4 +89,3 @@ sql_file_path = "Sample_SQL_Script.sql"
 
 
 
-

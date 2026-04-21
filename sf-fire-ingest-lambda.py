@@ -1,6 +1,7 @@
 import json
 import boto3
 import urllib.request
+import os
 from datetime import datetime
 from urllib.error import HTTPError, URLError
 
@@ -27,7 +28,7 @@ def get_date_12_months_ago():
         last_day = monthrange(year, month)[1]
         return datetime(year, month, last_day, 0, 0, 0)
 
-BUCKET = 'sf-fire-feeds'
+BUCKET = os.environ.get("BUCKET_NAME", "sf-fire-feeds")
 
 def lambda_handler(event, context):
     date_str = datetime.now().strftime('%Y/%m/%d')
